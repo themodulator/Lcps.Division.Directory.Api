@@ -134,6 +134,7 @@ namespace Lcps.Division.Directory.API.Areas.DirectorySetup.Controllers
         {
             if (ModelState.IsValid)
             {
+                membershipScope.LiteralName = MembershipScopeRepository.GenerateLiteralName(membershipScope.Caption);
                 db.MembershipScopes.Update(membershipScope);
                 return RedirectToAction("Index");
             }

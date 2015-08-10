@@ -21,7 +21,8 @@ namespace Lcps.Division.Directory.API.Infrastructure
 
         public static string GetConnectionString()
         {
-            return System.Configuration.ConfigurationManager.ConnectionStrings["LcpsDirectoryRepository"].ConnectionString;
+            string defaultCnxn = System.Configuration.ConfigurationManager.AppSettings["CurrentConnectionString"];
+            return System.Configuration.ConfigurationManager.ConnectionStrings[defaultCnxn].ConnectionString;
         }
 
     }
