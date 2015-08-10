@@ -1,0 +1,42 @@
+﻿@using System.Data;
+@using Lcps.Division.Directory.Providers;
+
+@model ImportTextFile
+
+<h3>@Model.Title</h3>
+
+<h4>Preview</h4>
+
+<div class="well well-sm">
+    <div class="form-inline">
+        <div class="form-group">
+            <label class="control-label">Total:</label>
+            <label class="form-control-static">@Model.Rows.Count.ToString()</label>
+        </div>
+    </div>
+</div>
+
+<table class="table table-striped table-condensed table-hover">
+    <tr>
+        @foreach (DataColumn c in Model.Columns)
+        {
+            <th>@c.ColumnName</th>
+        }
+    </tr>
+    @foreach (DataRow r in Model.Rows)
+    {
+        <tr>
+            @foreach(DataColumn c in Model.Columns)
+            {
+                <td>@r[c].ToString()</td>
+            }
+        </tr>
+    }
+</table>
+
+
+
+
+
+
+

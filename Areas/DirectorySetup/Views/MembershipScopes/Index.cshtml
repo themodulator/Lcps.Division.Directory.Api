@@ -1,0 +1,38 @@
+﻿@using Lcps.Division.Directory.Repository;
+
+@model IEnumerable<MembershipScope>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/DirectorySetup/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Membership Scopes</h2>
+
+<p>
+    <a href="@Url.Action("Create", "MembershipScopes", new { area = "DirectorySetup"})" class="btn btn-link" style="margin-right: 24px;"><i class="fa fa-plus"></i> Create New</a>
+    <a href="@Url.Action("ExportXml", "MembershipScopes", new { area = "DirectorySetup"})" class="btn btn-link"><i class="fa fa-floppy-o"></i> Export</a>
+</p>
+<div class="row">
+    <div class="col-md-3">
+        <h3>Locations</h3>
+        @Html.Partial("_MembershipScopeList", @Model.Where(x => x.ScopeQualifier == MembershipScopeQualifier.Location))
+    </div>
+
+    <div class="col-md-3">
+        <h3>Types</h3>
+        @Html.Partial("_MembershipScopeList", @Model.Where(x => x.ScopeQualifier == MembershipScopeQualifier.Type))
+    </div>
+
+    <div class="col-md-3">
+        <h3>Position</h3>
+        @Html.Partial("_MembershipScopeList", @Model.Where(x => x.ScopeQualifier == MembershipScopeQualifier.Position))
+    </div>
+
+    <div class="col-md-3">
+        <h3>Grade Levels</h3>
+        @Html.Partial("_MembershipScopeList", @Model.Where(x => x.ScopeQualifier == MembershipScopeQualifier.Grade))
+    </div>
+
+
+</div>

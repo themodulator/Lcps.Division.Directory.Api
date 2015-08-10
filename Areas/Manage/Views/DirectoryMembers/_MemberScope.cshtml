@@ -1,0 +1,11 @@
+﻿@using Lcps.Division.Directory.Repository;
+
+@model IEnumerable<MembershipScope>
+
+<ul class="ms-ul">
+    @foreach (MembershipScope s in Model)
+    {
+        <li>@s.Caption</li>
+    }
+</ul>
+

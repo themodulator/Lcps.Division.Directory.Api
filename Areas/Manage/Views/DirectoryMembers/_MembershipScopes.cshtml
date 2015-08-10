@@ -1,0 +1,39 @@
+﻿@using Lcps.Division.Directory.Repository;
+@using Lcps.Division.Directory.API.Areas.Manage.Models;
+
+@model IEnumerable<MembershipScopeEditorItem>
+
+
+
+<table class="table table-striped table-hover table-condensed">
+    <tr>
+        <th>Select</th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Scope.Caption)
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @if (item.Checked)
+                {
+                    <input type="checkbox" data-size="mini" data-toggle="toggle" class="cb-toggle" id="cb-@item.Scope.BinaryValue.ToString()" checked="checked" />
+                }
+                else
+                {
+                    <input type="checkbox" data-size="mini" data-toggle="toggle" class="cb-toggle" id="cb-@item.Scope.BinaryValue.ToString()" />
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Scope.Caption, new { title = item.Scope.BinaryValue.ToString() })  
+                
+            </td>
+        </tr>
+    }
+</table>
+
+
+

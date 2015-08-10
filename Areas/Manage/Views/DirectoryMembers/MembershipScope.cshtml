@@ -1,0 +1,97 @@
+﻿@using Lcps.Division.Directory.Repository;
+@using Lcps.Division.Directory.API.Areas.Manage.Models;
+
+@model MembershipScopeModel
+
+
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
+
+@{
+    ViewBag.Title = "MembershipScope";
+    Layout = "~/Areas/Manage/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Membership Scope</h3>
+
+<h5>@Model.Person.SurName, @Model.Person.GivenName</h5>
+@{
+    <p>
+        @string.Join(", ", MembershipScopeRepository
+            .GetApplicableScopes(Model.Person.MembershipScope)
+            .OrderBy(x => x.Caption)
+            .Select(x => x.Caption)
+            .ToArray())
+    </p>
+}
+
+
+<script>
+    $(function () {
+        $('.cb-toggle').bootstrapToggle();
+    })
+
+    function saveChanges(memberId) {
+        var total = 0;
+        $('.cb-toggle').each(
+            function () {
+                var id = $(this).attr('id');
+                var val = parseInt(id.replace('cb-', ''));
+                var ckd = $(this).prop('checked');
+
+                if (ckd) {
+                    total += val;
+                }
+            }
+        );
+
+        $.ajax({
+            url: "@Url.Action("UpdateScope", "DirectoryMembers", new { area = "Manage" })",
+            data: {
+                memberId: memberId,
+                binaryValue: total
+            },
+
+            success: function (data) {
+                window.location.href = '/Manage/DirectoryMembers/Edit?id=' + memberId;
+            }
+        });
+    }
+
+    function getParameterByName(name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+
+</script>
+
+<div class="row">
+    <p class="container">
+        <button type="button" onclick="saveChanges('@Request.QueryString["memberId"]');" class="btn btn-info btn-sm"><i class="fa fa-floppy-o"></i> Save Changes</button>
+    </p>
+
+    <div class="col-md-3">
+        <strong>Locations</strong>
+        @Html.Partial("_MembershipScopes", @Model.MembershipScopes.Where(x => x.Scope.ScopeQualifier == MembershipScopeQualifier.Location))
+    </div>
+
+    <div class="col-md-3">
+        <strong>Types</strong>
+        @Html.Partial("_MembershipScopes", @Model.MembershipScopes.Where(x => x.Scope.ScopeQualifier == MembershipScopeQualifier.Type))
+    </div>
+
+    <div class="col-md-3">
+        <strong>Position</strong>
+        @Html.Partial("_MembershipScopes", @Model.MembershipScopes.Where(x => x.Scope.ScopeQualifier == MembershipScopeQualifier.Position))
+    </div>
+
+    <div class="col-md-3">
+        <strong>Grade</strong>
+        @Html.Partial("_MembershipScopes", @Model.MembershipScopes.Where(x => x.Scope.ScopeQualifier == MembershipScopeQualifier.Grade))
+    </div>
+
+</div>
+
+
