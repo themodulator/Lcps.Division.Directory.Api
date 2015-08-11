@@ -1,0 +1,86 @@
+﻿@using Lcps.Division.Directory.Repository;
+@using Lcps.Division.Directory.API.Areas.Manage.Models;
+@using PagedList.Mvc;
+
+
+@model DirectoryMemberListModel
+
+@{
+    
+    ViewBag.Page = Request["page"];
+}
+
+Total: @ViewBag.Total Page @(Model.Members.PageCount < Model.Members.PageNumber ? 0 : Model.Members.PageNumber) of @Model.Members.PageCount
+
+@Html.PagedListPager(Model.Members, 
+  page => Url.Action(Model.SourceRoute.Action, new { page }))
+
+<div class="table-responsive">
+    <table class="table table-hover table-striped table-condensed">
+        <tr>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Members.First().InternalId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Members.First().SurName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Members.First().GivenName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Members.First().MiddleName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Members.First().Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Members.First().UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Members.First().DOB)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Members.First().Gender)
+            </th>
+
+        </tr>
+
+        @foreach (var item in Model.Members)
+        {
+            <tr>
+                <td>
+                    @if (Model.AllowEdit)
+                    {
+                        <a href="@Url.Action("Edit", "DirectoryMembers", new { area = "Manage", id = item.Id })" class="btn btn-link btn-sm"><i class="fa fa-pencil"></i> Edit</a>
+                    }
+                </td>
+                <td>
+                    @item.InternalId
+                </td>
+                <td>
+                    @item.SurName
+                </td>
+                <td>
+                    @item.GivenName
+                </td>
+                <td>
+                    @item.MiddleName
+                </td>
+                <td>
+                    @item.Email
+                </td>
+                <td>
+                    @item.UserName
+                </td>
+                <td>
+                    @item.DOB
+                </td>
+                <td>
+                    @item.Gender
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

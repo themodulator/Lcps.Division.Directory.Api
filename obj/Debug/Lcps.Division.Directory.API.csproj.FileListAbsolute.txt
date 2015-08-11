@@ -167,7 +167,6 @@ C:\GitHub\Repositories\Lcps\Lcps.Division.Directory.Api\bin\Microsoft.AspNet.Ide
 C:\GitHub\Repositories\Lcps\Lcps.Division.Directory.Api\bin\Microsoft.Owin.Security.xml
 C:\GitHub\Repositories\Lcps\Lcps.Division.Directory.Api\bin\Microsoft.Owin.Security.Cookies.xml
 C:\GitHub\Repositories\Lcps\Lcps.Division.Directory.Api\bin\Microsoft.Owin.Security.OAuth.xml
-C:\GitHub\Repositories\Lcps\Lcps.Division.Directory.Api\bin\System.Web.Http.Owin.xml
 C:\GitHub\Repositories\Lcps\Lcps.Division.Directory.Api\bin\Microsoft.AspNet.Identity.Core.dll
 C:\GitHub\Repositories\Lcps\Lcps.Division.Directory.Api\bin\Microsoft.AspNet.Identity.Owin.dll
 C:\GitHub\Repositories\Lcps\Lcps.Division.Directory.Api\bin\Microsoft.Owin.Security.Cookies.dll
@@ -175,3 +174,7 @@ C:\GitHub\Repositories\Lcps\Lcps.Division.Directory.Api\bin\Microsoft.Owin.Secur
 C:\GitHub\Repositories\Lcps\Lcps.Division.Directory.Api\bin\Microsoft.Owin.Security.OAuth.dll
 C:\GitHub\Repositories\Lcps\Lcps.Division.Directory.Api\bin\System.Net.Http.Formatting.dll
 C:\GitHub\Repositories\Lcps\Lcps.Division.Directory.Api\bin\System.Web.Http.dll
+C:\GitHub\Repositories\Lcps\Lcps.Division.Directory.Api\bin\PagedList.dll
+C:\GitHub\Repositories\Lcps\Lcps.Division.Directory.Api\bin\PagedList.Mvc.dll
+C:\GitHub\Repositories\Lcps\Lcps.Division.Directory.Api\bin\PagedList.xml
+C:\GitHub\Repositories\Lcps\Lcps.Division.Directory.Api\bin\PagedList.Mvc.xml

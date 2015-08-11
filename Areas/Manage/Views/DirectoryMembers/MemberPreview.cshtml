@@ -1,0 +1,16 @@
+﻿
+@using Lcps.Division.Directory.API.Areas.Manage.Models;
+
+@model DirectoryMemberListModel
+
+@{
+    ViewBag.Title = "MemberPreview";
+    Layout = "~/Areas/Manage/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Member Import Preview</h2>
+
+@Html.Partial("_MemberList", Model)
+
+
+

@@ -1,28 +1,29 @@
 ﻿@using Lcps.Division.Directory.Providers;
 
-@model ImportTextFile
+@model ImportTextFile<Lcps.Division.Directory.Repository.DirectoryMember>
 
-<h2>@Model.Title</h2>
+    <h2>@Model.Title</h2>
 
-@using (Html.BeginForm(Model.BrowseFormRoute.Action, Model.BrowseFormRoute.Controller, new { area = Model.BrowseFormRoute.Area }, FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.HiddenFor(model => model.Delimiter)
-    @Html.HiddenFor(model => model.Title)
+    @using (Html.BeginForm(Model.BrowseFormRoute.Action, Model.BrowseFormRoute.Controller, new { area = Model.BrowseFormRoute.Area }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.HiddenFor(model => model.Delimiter)
+        @Html.HiddenFor(model => model.Title)
 
-    <div class="form-inline">
-        <fieldset>
-            <legend>
-                Browse For File
-            </legend>
-            <div class="form-group">
-                <label class="control-label col-md-3">Source File</label>
-                <div class="col-md-5">
-                    @Html.TextBoxFor(model => model.InputFile, new { @type = "file", style = "width: 400px;" })
+        <div class="form-inline">
+            <fieldset>
+                <legend>
+                    Browse For File
+                </legend>
+                <div class="form-group">
+                    <label class="control-label col-md-3">Source File</label>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(model => model.InputFile, new { @type = "file", style = "width: 400px;" })
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-info"><i class="fa fa-search"></i> Preview</button>
-            </div>
-        </fieldset>
-    </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-info"><i class="fa fa-search"></i> Preview</button>
+                </div>
+            </fieldset>
+        </div>
 
-}
-
+    }

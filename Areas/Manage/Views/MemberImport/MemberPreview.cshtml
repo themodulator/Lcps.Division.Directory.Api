@@ -1,0 +1,120 @@
+﻿@using Lcps.Division.Directory.Providers;
+@using Lcps.Division.Directory.Repository;
+@using PagedList;
+@using PagedList.Mvc
+@using Lcps.Division.Directory.API.Areas.Manage.Models;
+
+@model PagedList<DirectoryMember>
+
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Manage/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Directory Member Preview</h2>
+
+@{
+
+    ViewBag.Page = Request["page"];
+}
+
+Total: @ViewBag.Total Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model,
+  page => Url.Action("MemberPreview", new { page }))
+
+<div class="table-responsive">
+    <table class="table table-hover table-striped table-condensed">
+        <tr>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().InternalId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().SurName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().GivenName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().MiddleName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().DOB)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Gender)
+            </th>
+
+        </tr>
+
+        @foreach (DirectoryMember item in Model)
+        {
+            <tr>
+                <td>
+                    <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#@item.InternalId"><i class="fa fa-eye"></i> Details</button>
+
+                    <!-- Modal -->
+                    <div id="@item.InternalId" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">@item.SurName, @item.GivenName</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container">
+                                        <div class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="control-label">Membership Scope:</label>
+                                                <label class="form-control-static">@item.GetMembershipScopeCaption()</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    @item.InternalId
+                </td>
+                <td>
+                    @item.SurName
+                </td>
+                <td>
+                    @item.GivenName
+                </td>
+                <td>
+                    @item.MiddleName
+                </td>
+                <td>
+                    @item.Email
+                </td>
+                <td>
+                    @item.UserName
+                </td>
+                <td>
+                    @item.DOB
+                </td>
+                <td>
+                    @item.Gender
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+

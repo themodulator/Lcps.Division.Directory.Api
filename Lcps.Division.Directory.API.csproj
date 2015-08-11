@@ -76,6 +76,14 @@
       <HintPath>..\Lcps.Division.Directory.Solution\Lcps.Division.Directory\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\Lcps.Division.Directory.Solution\Lcps.Division.Directory\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\Lcps.Division.Directory.Solution\Lcps.Division.Directory\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -214,6 +222,7 @@
     <Compile Include="Areas\Manage\Controllers\DirectoryMembersController.cs" />
     <Compile Include="Areas\Manage\Controllers\MemberImportController.cs" />
     <Compile Include="Areas\Manage\ManageAreaRegistration.cs" />
+    <Compile Include="Areas\Manage\Models\DirectoryMemberListModel.cs" />
     <Compile Include="Areas\Manage\Models\MembershipScopeModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -247,6 +256,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -301,7 +311,9 @@
     <Content Include="Areas\Import\Views\_ImportTextFileProvider.cshtml" />
     <Content Include="Areas\Import\Views\_ImportTextFilePreview.cshtml" />
     <Content Include="Areas\Manage\Views\MemberImport\Index.cshtml" />
-    <Content Include="Areas\Manage\Views\MemberImport\Preview.cshtml" />
+    <Content Include="Areas\Manage\Views\MemberImport\MemberPreview.cshtml" />
+    <Content Include="Areas\Manage\Views\DirectoryMembers\_MemberList.cshtml" />
+    <Content Include="Areas\Manage\Views\DirectoryMembers\MemberPreview.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
