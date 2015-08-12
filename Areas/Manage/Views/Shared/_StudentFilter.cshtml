@@ -1,0 +1,41 @@
+﻿@using Lcps.Division.Directory.Repository;
+
+@model long
+
+<div class="col-md-6">
+    <strong>
+        Locations
+    </strong>
+    <ul>
+        @foreach (MembershipScope s in MembershipScopeRepository.GetByQualifier(MembershipScopeQualifier.Location))
+        {
+            if (MembershipScopeRepository.HasFlag(Model, s.Caption, MembershipScopeRepository.GetEnumType()))
+            {
+                <li><input type="checkbox" data-size="mini" data-toggle="toggle" class="cb-toggle" id="cb-@s.BinaryValue.ToString()" checked="checked" /> @s.Caption</li>
+            }
+            else
+            {
+                <li><input type="checkbox" data-size="mini" data-toggle="toggle" class="cb-toggle" id="cb-@s.BinaryValue.ToString()" /> @s.Caption</li>
+            }
+        }
+    </ul>
+</div>
+
+<div class="col-md-6">
+    <strong>
+        Grades
+    </strong>
+    <ul>
+        @foreach (MembershipScope s in MembershipScopeRepository.GetByQualifier(MembershipScopeQualifier.Grade))
+        {
+            if (MembershipScopeRepository.HasFlag(Model, s.Caption, MembershipScopeRepository.GetEnumType()))
+            {
+                <li><input type="checkbox" data-size="mini" data-toggle="toggle" class="cb-toggle" id="cb-@s.BinaryValue.ToString()" checked="checked" /> @s.Caption</li>
+            }
+            else
+            {
+                <li><input type="checkbox" data-size="mini" data-toggle="toggle" class="cb-toggle" id="cb-@s.BinaryValue.ToString()" /> @s.Caption</li>
+            }
+        }
+    </ul>
+</div>

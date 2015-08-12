@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using System.IO;
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -9,6 +11,24 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    @if (Session["Theme"] == null)
+    {
+        <link href="~/Content/Themes/spacelab.css" type="text/css" rel="stylesheet" />
+    }
+    else
+    {
+        @Html.Raw("<link href=\"/Content/Themes/" + Session["Theme"] + "\" type=\"text\" rel=\"stylesheet\" />");
+    }
+
+    <script>
+        function search() {
+            var srch = $("#srch-term").val();
+            if (srch != null) {
+                window.location.href = "/Manage/DirectoryMembers/Index?search=" + srch;
+            }
+        }
+    </script>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -23,8 +43,39 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Scopes", "Index", "MembershipScopes", new { area = "DirectorySetup" }, null)</li>
+                    <li>@Html.ActionLink("Add Member", "Create", "DirectoryMembers", new { area = "Manage" }, null)</li>
+                    <li>@Html.ActionLink("Scopes", "Index", "MembershipScopes", new { area = "Manage" }, null)</li>
+                    <li>@Html.ActionLink("Import", "Index", "MemberImport", new { area = "Manage" }, null)</li>
+                    <li>@Html.ActionLink("Filter", "Filter", "DirectoryMembers", new { area = "Manage" }, null)</li>
                 </ul>
+
+
+                <div class="pull-right">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Themes <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                @foreach (FileInfo f in (new DirectoryInfo(HttpContext.Current.Server.MapPath("~/Content/Themes/")).GetFiles("*.css")))
+                                {
+                                    <li><a href="@Url.Action("Index", new { @page = ViewBag.Page, @Filter = ViewBag.Filter, @theme = Path.GetFileName(f.FullName) })">@Path.GetFileNameWithoutExtension(f.FullName)</a></li>
+                                }
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="pull-right">
+
+                    <form class="navbar-form" role="search">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="button" onclick="search();"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
             </div>
         </div>
     </div>
@@ -36,6 +87,6 @@
         </footer>
     </div>
 
-   
+
 </body>
 </html>

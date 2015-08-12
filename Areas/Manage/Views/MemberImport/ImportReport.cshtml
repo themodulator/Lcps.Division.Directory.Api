@@ -1,0 +1,112 @@
+﻿@using Lcps.Division.Directory.Repository;
+@using PagedList;
+@using PagedList.Mvc;
+
+@using Lcps.Division.Directory.Providers;
+
+@model PagedList<DirectoryMember>
+
+@{
+    ViewBag.Title = "ImportReport";
+    Layout = "~/Areas/Manage/Views/Shared/_Layout.cshtml";
+    ViewBag.Page = Request["page"];
+}
+
+<h3>Directory Member Import Report</h3>
+
+
+Total: @ViewBag.Total Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+<p>
+    <a href="@Url.Action("ImportReport", new { @page = ViewBag.Page })" class="btn btn-info">All Results <span class="badge">@ViewBag.Total</span></a>
+    <a href="@Url.Action("ImportReport", new { @page = ViewBag.Page, sync = ImportSyncStatus.Insert, import = BootstrapStatus.success })" class="btn btn-success">Insert Success <span class="badge">@ViewBag.InsertSuccess</span></a>
+    <a href="@Url.Action("ImportReport", new { @page = ViewBag.Page, sync = ImportSyncStatus.Update, import = BootstrapStatus.success })" class="btn btn-warning">Update Success <span class="badge">@ViewBag.UpdateSuccess</span></a>
+    <a href="@Url.Action("ImportReport", new { @page = ViewBag.Page, import = BootstrapStatus.danger })" class="btn btn-danger">All Errors <span class="badge">@ViewBag.Erros</span></a>
+    <a href="@Url.Action("ImportReport", new { @page = ViewBag.Page, sync = ImportSyncStatus.Insert, import = BootstrapStatus.danger })" class="btn btn-danger">Insert Errors <span class="badge">@ViewBag.InsertErrors</span></a>
+    <a href="@Url.Action("ImportReport", new { @page = ViewBag.Page, sync = ImportSyncStatus.Update, import = BootstrapStatus.danger })" class="btn btn-danger">Update Errors <span class="badge">@ViewBag.UpdateErrors</span></a>
+</p>
+
+
+@Html.PagedListPager(Model,
+  page => Url.Action("ImportReport", new { @page = page, @sync=Request["sync"], @import = Request["import"]}))
+
+
+
+<table class="table table-hover table-striped table-condensed">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.First().InternalId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().SurName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().GivenName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().MiddleName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().DOB)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Gender)
+        </th>
+        <th>
+            Scope
+        </th>
+        <th>Import Status</th>
+    </tr>
+
+    @foreach (DirectoryMember item in Model)
+    {
+        <tr>
+            <td>
+                @item.InternalId
+            </td>
+            <td>
+                @item.SurName
+            </td>
+            <td>
+                @item.GivenName
+            </td>
+            <td>
+                @item.MiddleName
+            </td>
+            <td>
+                @item.Email
+            </td>
+            <td>
+                @item.UserName
+            </td>
+            <td>
+                @(((DateTime)item.DOB).ToShortDateString())
+            </td>
+            <td>
+                @item.Gender
+            </td>
+            <td>
+                @item.GetMembershipScopeCaption()
+            </td>
+
+            <td class="text-@item.ImportStatus.ToString()">
+                @if (item.Exception == null)
+                {
+                    @item.ImportStatus
+                }
+                else
+                {
+                    @Html.Raw(item.Exception.ToUL());
+                }
+
+            </td>
+
+        </tr>
+    }
+</table>

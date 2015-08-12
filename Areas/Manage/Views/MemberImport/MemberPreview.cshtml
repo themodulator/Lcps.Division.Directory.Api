@@ -10,111 +10,103 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Areas/Manage/Views/Shared/_Layout.cshtml";
-}
-
-<h2>Directory Member Preview</h2>
-
-@{
-
     ViewBag.Page = Request["page"];
 }
+
+<h3>Directory Member Preview</h3>
+
+<p>
+    <a href="@Url.Action("MemberPreview")" class="btn btn-info">All <span class="badge">@ViewBag.Total</span></a>
+    <a href="@Url.Action("MemberPreview", new { @sync = ImportSyncStatus.Current })" class="btn btn-default">Current <span class="badge">@ViewBag.Current</span></a>
+    <a href="@Url.Action("MemberPreview", new { @sync = ImportSyncStatus.Insert })" class="btn btn-success">Insert <span class="badge">@ViewBag.Insert</span></a>
+    <a href="@Url.Action("MemberPreview", new { @sync = ImportSyncStatus.Update })" class="btn btn-warning">Update <span class="badge">@ViewBag.Update</span></a>
+    <a href="@Url.Action("MemberPreview", new { @sync = ImportSyncStatus.Error })" class="btn btn-danger">Errors <span class="badge">@ViewBag.Error</span></a>
+</p>
 
 Total: @ViewBag.Total Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
 @Html.PagedListPager(Model,
   page => Url.Action("MemberPreview", new { page }))
 
-<div class="table-responsive">
-    <table class="table table-hover table-striped table-condensed">
+<a href="@Url.Action("Importmembers")" class="btn btn-warning">Import</a>
+
+<table class="table table-hover table-striped table-condensed">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.First().InternalId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().SurName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().GivenName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().MiddleName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().DOB)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Gender)
+        </th>
+        <th>
+            Scope
+        </th>
+        <th>Sync Status</th>
+    </tr>
+
+    @foreach (DirectoryMember item in Model)
+    {
         <tr>
-            <th></th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().InternalId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().SurName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().GivenName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().MiddleName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().UserName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().DOB)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Gender)
-            </th>
+            <td>
+                @item.InternalId
+            </td>
+            <td>
+                @item.SurName
+            </td>
+            <td>
+                @item.GivenName
+            </td>
+            <td>
+                @item.MiddleName
+            </td>
+            <td>
+                @item.Email
+            </td>
+            <td>
+                @item.UserName
+            </td>
+            <td>
+                @(((DateTime)item.DOB).ToShortDateString())
+            </td>
+            <td>
+                @item.Gender
+            </td>
+            <td>
+                @item.GetMembershipScopeCaption()
+            </td>
+
+            <td class="text-@item.GetBootStrapStatus(item.SyncStatus)">
+                @if (item.SyncStatus == ImportSyncStatus.Error)
+                {
+                    @Html.Raw(@item.Exception.ToUL())
+                }
+                else
+                {
+                    @item.SyncStatus
+                }
+            </td>
 
         </tr>
+    }
 
-        @foreach (DirectoryMember item in Model)
-        {
-            <tr>
-                <td>
-                    <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#@item.InternalId"><i class="fa fa-eye"></i> Details</button>
+</table>
 
-                    <!-- Modal -->
-                    <div id="@item.InternalId" class="modal fade" role="dialog">
-                        <div class="modal-dialog">
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">@item.SurName, @item.GivenName</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="container">
-                                        <div class="form-horizontal">
-                                            <div class="form-group">
-                                                <label class="control-label">Membership Scope:</label>
-                                                <label class="form-control-static">@item.GetMembershipScopeCaption()</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    @item.InternalId
-                </td>
-                <td>
-                    @item.SurName
-                </td>
-                <td>
-                    @item.GivenName
-                </td>
-                <td>
-                    @item.MiddleName
-                </td>
-                <td>
-                    @item.Email
-                </td>
-                <td>
-                    @item.UserName
-                </td>
-                <td>
-                    @item.DOB
-                </td>
-                <td>
-                    @item.Gender
-                </td>
-            </tr>
-        }
-
-    </table>
-</div>
 

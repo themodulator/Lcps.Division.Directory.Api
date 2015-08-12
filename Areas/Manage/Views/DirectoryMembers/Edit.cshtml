@@ -22,190 +22,205 @@
 
 <h2>Edit</h2>
 
-@using (Html.BeginForm())
+@if (Model.Exception != null)
 {
-    @Html.AntiForgeryToken()
+    <div class="panel panel-danger">
+        <div class="panel-heading">
+            Error!
+        </div>
+        <div class="panel-body">
+            @Html.Raw(Model.Exception.ToUL())
+        </div>
+    </div>
 
-    <div class="form-horizontal">
-        <h4>Directory Member</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
+}
+else
+{
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
 
-        <div class="row">
-            <div class="col-md-6">
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        Identification
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.InternalId, htmlAttributes: new { @class = "control-label col-md-3" })
-                            <div class="col-md-9">
-                                @Html.EditorFor(model => model.InternalId, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.InternalId, "", new { @class = "text-danger" })
-                            </div>
+
+        <div class="form-horizontal">
+            <h4>Directory Member</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.Id)
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <i class="fa fa-key"></i> Identification
                         </div>
-
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.GivenName, htmlAttributes: new { @class = "control-label col-md-3" })
-                            <div class="col-md-9">
-                                @Html.EditorFor(model => model.GivenName, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.GivenName, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.MiddleName, htmlAttributes: new { @class = "control-label col-md-3" })
-                            <div class="col-md-9">
-                                @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.MiddleName, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.SurName, htmlAttributes: new { @class = "control-label col-md-3" })
-                            <div class="col-md-9">
-                                @Html.EditorFor(model => model.SurName, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.SurName, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-3" })
-                            <div class="col-md-9">
-                                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.SurName, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.DOB, htmlAttributes: new { @class = "control-label col-md-3" })
-                            <div class="col-md-9">
-                                @Html.EditorFor(model => model.DOB, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.DOB, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-3" })
-                            <div class="col-md-9">
-                                @Html.EnumDropDownListFor(model => model.Gender, htmlAttributes: new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-
-
-                        <div class="container">
-                            <button type="submit" class="btn btn-success">Save Changes</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="panel panel-warning">
-                    <div class="panel-heading">
-                        Account Information
-                    </div>
-                    <div class="panel-body">
-                        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModal"><i class="fa fa-eye"></i> Reveal Password</button>
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-3" })
-                            <div class="col-md-9">
-                                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-3" })
-                            <div class="col-md-9">
-                                <label class="form-control-static">@Model.UserName</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <!-- Modal -->
-                <div id="myModal" class="modal fade" role="dialog">
-                    <div class="modal-dialog">
-
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">@Model.SurName, @Model.GivenName</h4>
-                            </div>
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-3" })
-                                    <div class="col-md-9">
-                                        <label class="form-control-static">@Model.UserName</label>
-                                    </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.InternalId, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.EditorFor(model => model.InternalId, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.InternalId, "", new { @class = "text-danger" })
                                 </div>
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.InitialPassword, htmlAttributes: new { @class = "control-label col-md-3" })
-                                    <div class="col-md-9">
-                                        <label class="form-control-static">@Model.DecryptPassword()</label>
-                                    </div>
-                                </div>
-                                
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.GivenName, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.EditorFor(model => model.GivenName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.GivenName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.MiddleName, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.MiddleName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.SurName, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.EditorFor(model => model.SurName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.SurName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.SurName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DOB, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.EditorFor(model => model.DOB, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.DOB, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.EnumDropDownListFor(model => model.Gender, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+                            <div class="container">
+                                <button type="submit" class="btn btn-success">Save Changes</button>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
-                <div class="panel panel-warning">
-                    <div class="panel-heading">
-                        Membership Scope
-                    </div>
-                    <div class="panel-body">
+                <div class="col-md-6">
+                    <div class="panel panel-warning">
+                        <div class="panel-heading">
+                            <i class="fa fa-user"></i> Account Information
+                        </div>
+                        <div class="panel-body">
+                            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModal"><i class="fa fa-eye"></i> Reveal Password</button>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
 
-                        <p>
-                            <a href="@Url.Action("MembershipScope", "DirectoryMembers", new { area = "Manage", memberId = Model.Id } )" class="btn btn-link"><i class="fa fa-pencil"></i> Edit</a>
-                        </p>
-                        @if (Model.GetLocations().Count() > 0)
-                        {
-                            <div class="col-md-@Model.GetCategoryCount()">
-                                <strong>Locations</strong>
-                                @Html.Partial("_MemberScope", Model.GetLocations())
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    <label class="form-control-static">@Model.UserName</label>
+                                </div>
                             </div>
-                        }
-                        @if (Model.GetTypes().Count() > 0)
-                        {
-                            <div class="col-md-@Model.GetCategoryCount()">
-                                <strong>Types</strong>
-                                @Html.Partial("_MemberScope", Model.GetTypes())
+                        </div>
+                    </div>
+
+
+
+                    <!-- Modal -->
+                    <div id="myModal" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">@Model.SurName, @Model.GivenName</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-9">
+                                            <label class="form-control-static">@Model.UserName</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.InitialPassword, htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-9">
+                                            <label class="form-control-static">@Model.DecryptPassword()</label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
                             </div>
-                        }
-                        @if (Model.GetPositions().Count() > 0)
-                        {
-                            <div class="col-md-@Model.GetCategoryCount()">
-                                <strong>Positions</strong>
-                                @Html.Partial("_MemberScope", Model.GetPositions())
-                            </div>
-                        }
-                        @if (Model.GetGrades().Count() > 0)
-                        {
-                            <div class="col-md-@Model.GetCategoryCount()">
-                                <strong>Grades</strong>
-                                @Html.Partial("_MemberScope", Model.GetGrades())
-                            </div>
-                        }
+
+                        </div>
+                    </div>
+
+                    <div class="panel panel-warning">
+                        <div class="panel-heading">
+                            <i class="fa fa-cubes"></i> Membership Scope
+                        </div>
+                        <div class="panel-body">
+
+                            <p>
+                                <a href="@Url.Action("MembershipScope", "DirectoryMembers", new { area = "Manage", memberId = Model.Id } )" class="btn btn-link"><i class="fa fa-pencil"></i> Edit</a>
+                            </p>
+                            @if (Model.GetLocations().Count() > 0)
+                            {
+                                <div class="col-md-@Model.GetCategoryCount()">
+                                    <strong>Locations</strong>
+                                    @Html.Partial("_MemberScope", Model.GetLocations())
+                                </div>
+                            }
+                            @if (Model.GetTypes().Count() > 0)
+                            {
+                                <div class="col-md-@Model.GetCategoryCount()">
+                                    <strong>Types</strong>
+                                    @Html.Partial("_MemberScope", Model.GetTypes())
+                                </div>
+                            }
+                            @if (Model.GetPositions().Count() > 0)
+                            {
+                                <div class="col-md-@Model.GetCategoryCount()">
+                                    <strong>Positions</strong>
+                                    @Html.Partial("_MemberScope", Model.GetPositions())
+                                </div>
+                            }
+                            @if (Model.GetGrades().Count() > 0)
+                            {
+                                <div class="col-md-@Model.GetCategoryCount()">
+                                    <strong>Grades</strong>
+                                    @Html.Partial("_MemberScope", Model.GetGrades())
+                                </div>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
 }
-
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>

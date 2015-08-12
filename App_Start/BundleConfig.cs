@@ -30,6 +30,8 @@ namespace Lcps.Division.Directory.API
 
             l.Add("~/content/font-awesome.css");
             l.Add("~/content/site.css");
+
+            /*
             if (System.Configuration.ConfigurationManager.AppSettings["currentTheme"] == null)
                 l.Add("~/content/bootstrap.css");
             else
@@ -38,7 +40,7 @@ namespace Lcps.Division.Directory.API
                 string path = System.Configuration.ConfigurationManager.AppSettings[theme];
                 l.Add(path);
             }
-                
+            */    
 
 
 

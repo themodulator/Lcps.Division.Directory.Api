@@ -1,0 +1,72 @@
+﻿@using Lcps.Division.Directory.Repository;
+@model IEnumerable<MembershipScopeEditorItem>
+
+@{
+    ViewBag.Title = "Filter";
+    Layout = "~/Areas/Manage/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Membership Filter</h2>
+
+
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
+
+
+
+<script>
+    $(function () {
+        $('.cb-toggle').bootstrapToggle();
+    })
+
+    function saveChanges() {
+        var total = 0;
+
+        $('.cb-toggle').each(
+            function () {
+                var id = $(this).attr('id');
+                var val = parseInt(id.replace('cb-', ''));
+                var ckd = $(this).prop('checked');
+
+                if (ckd) {
+                    total += val;
+                }
+            }
+        );
+
+        var url = "/Manage/DirectoryMembers/Index?filter=" + total;
+
+        window.location.href = url;
+
+    }
+
+    
+
+</script>
+
+<p>
+    <button type="button" onclick="saveChanges();" class="btn btn-info">Get Results</button>
+</p>
+
+<div class="row">
+    <div class="col-md-3">
+        <strong>Locations</strong>
+        @Html.Partial("_MembershipScopes", Model.Where(x => x.Scope.ScopeQualifier == MembershipScopeQualifier.Location))
+    </div>
+
+    <div class="col-md-3">
+        <strong>Types</strong>
+        @Html.Partial("_MembershipScopes", Model.Where(x => x.Scope.ScopeQualifier == MembershipScopeQualifier.Type))
+    </div>
+
+    <div class="col-md-3">
+        <strong>Position</strong>
+        @Html.Partial("_MembershipScopes", Model.Where(x => x.Scope.ScopeQualifier == MembershipScopeQualifier.Position))
+    </div>
+
+    <div class="col-md-3">
+        <strong>Grade</strong>
+        @Html.Partial("_MembershipScopes", Model.Where(x => x.Scope.ScopeQualifier == MembershipScopeQualifier.Grade))
+    </div>
+</div>
+

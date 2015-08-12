@@ -178,3 +178,5 @@ C:\GitHub\Repositories\Lcps\Lcps.Division.Directory.Api\bin\PagedList.dll
 C:\GitHub\Repositories\Lcps\Lcps.Division.Directory.Api\bin\PagedList.Mvc.dll
 C:\GitHub\Repositories\Lcps\Lcps.Division.Directory.Api\bin\PagedList.xml
 C:\GitHub\Repositories\Lcps\Lcps.Division.Directory.Api\bin\PagedList.Mvc.xml
+C:\GitHub\Repositories\Lcps\Lcps.Division.Directory.Api\obj\Debug\Lcps.Division.Directory.API.Migrations.DiretcorymemberMemberClass.resources
+C:\GitHub\Repositories\Lcps\Lcps.Division.Directory.Api\obj\Debug\Lcps.Division.Directory.API.Migrations.UserMemberSchema001.resources

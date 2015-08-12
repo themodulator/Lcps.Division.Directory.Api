@@ -17,7 +17,7 @@ namespace Lcps.Division.Directory.API.Areas.Manage.Models
     {
         public bool AllowEdit { get; set; }
 
-        public PagedList<DirectoryMember> Members { get; set; }
+        public PagedList<DirectoryMemberInfo> Members { get; set; }
 
         public MvcRouteDefinition SourceRoute { get; set; }
     }

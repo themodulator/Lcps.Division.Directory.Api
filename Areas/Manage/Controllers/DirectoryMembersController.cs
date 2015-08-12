@@ -1,23 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
+﻿using Lcps.Division.Directory.API.Areas.Manage.Models;
+using Lcps.Division.Directory.API.Infrastructure;
+using Lcps.Division.Directory.Infrastructure;
+using Lcps.Division.Directory.Repository;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
-
-using Lcps.Division.Directory.API.Infrastructure;
-using Lcps.Division.Directory.Repository;
-using Lcps.Division.Directory.Infrastructure;
-using Lcps.Division.Directory.API.Areas.Manage.Models;
+using System.Web;
+using System.Web.Mvc;
+using PagedList;
 
 namespace Lcps.Division.Directory.API.Areas.Manage.Controllers
 {
@@ -39,17 +39,84 @@ namespace Lcps.Division.Directory.API.Areas.Manage.Controllers
         }
 
         // GET: Manage/DirectoryMembers
-        public ActionResult Index()
+        public ActionResult Index(int? page, long? filter, string search, string theme)
         {
-            return View(db.DirectoryMembers.Get().OrderBy(x => x.SurName + x.GivenName).ToList());
+
+            List<DirectoryMemberInfo> mm;
+
+            if (filter == null)
+                mm = db.DirectoryMembers.Get().OrderBy(x => x.SurName + x.GivenName).ToList();
+            else
+            {
+                mm = DirectoryMember.GetByFilter(filter.Value);
+                ViewBag.Filter = filter.Value;
+            }
+
+            if(theme != null)
+                Session["Theme"] = theme;
+
+
+
+            List<DirectoryMember> dd = new List<DirectoryMember>();
+            foreach (DirectoryMemberInfo d in mm)
+            {
+                dd.Add(new DirectoryMember(d));
+            }
+
+            
+
+            page = (page == null) ? 1 : page;
+
+            ViewBag.Page = page.Value;
+
+
+
+
+            if (search != null)
+                dd = dd.Where(x => x.GetMembershipScopeCaption().Contains(search) |
+                    x.SurName.ToLower().Contains(search.ToLower()) |
+                    x.GivenName.ToLower().Contains(search.ToLower()) |
+                    x.InternalId.ToLower().Contains(search.ToLower()) |
+                    x.UserName.ToLower().Contains(search.ToLower())).ToList();
+
+
+            ViewBag.Total = dd.Count();
+
+            PagedList<DirectoryMember> pg = new PagedList<DirectoryMember>(dd, page.Value, 12);
+
+            return View(pg);
+        }
+
+
+        public ActionResult Filter(long? filter)
+        {
+            List<MembershipScope> scopes = db.MembershipScopes.Get().OrderBy(x => x.Caption).ToList();
+            System.Type t = scopes.ToEnum(x => x.LiteralName, x => x.BinaryValue);
+
+            filter = filter ?? 0;
+
+            ViewBag.Filter = filter.Value;
+
+            List<MembershipScopeEditorItem> items = new List<MembershipScopeEditorItem>();
+            foreach (MembershipScope scope in scopes)
+            {
+                items.Add(new MembershipScopeEditorItem()
+                {
+                    Challenge = filter.Value,
+                    Scope = scope,
+                    MembershipScopeType = t
+                });
+            }
+
+            return View(items);
         }
 
         public ActionResult MembershipScope(string memberId)
         {
-            DirectoryMember p = null;
+            DirectoryMemberInfo p = null;
 
             if (memberId == null)
-                p = new DirectoryMember()
+                p = new DirectoryMemberInfo()
                 {
                     UserName = "johnd",
                     GivenName = "John",
@@ -94,7 +161,7 @@ namespace Lcps.Division.Directory.API.Areas.Manage.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            DirectoryMember directoryMember = db.DirectoryMembers.GetByID(id);
+            DirectoryMemberInfo directoryMember = db.DirectoryMembers.GetByID(id);
             if (directoryMember == null)
             {
                 return HttpNotFound();
@@ -113,18 +180,18 @@ namespace Lcps.Division.Directory.API.Areas.Manage.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,InternalId,GivenName,MiddleName,SurName,DOB,Gender,InitialPassword,ConfirmPassword,MembershipScope")] DirectoryMember directoryMember)
+        public ActionResult Create([Bind(Include = "Id,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,InternalId,GivenName,MiddleName,SurName,DOB,Gender,InitialPassword,ConfirmPassword,MembershipScope")] DirectoryMemberInfo directoryMember)
         {
             directoryMember.Id = Guid.NewGuid().ToString();
             if (directoryMember.InitialPassword != directoryMember.ConfirmPassword)
                 ModelState.AddModelError("", "The passwords do not match");
 
-            
+
             string id = Guid.NewGuid().ToString();
 
             directoryMember.Id = Guid.NewGuid().ToString();
 
-            
+
 
             if (ModelState.IsValid)
             {
@@ -136,15 +203,21 @@ namespace Lcps.Division.Directory.API.Areas.Manage.Controllers
                     Anvil.RijndaelEnhanced re = new Anvil.RijndaelEnhanced(DirectoryMember.GuidKey);
                     directoryMember.InitialPassword = re.Encrypt(pwd);
 
-                    UserManager.Create(directoryMember, pwd);
-
-                    return RedirectToAction("MembershipScope", new { memberId = directoryMember.Id });
-                    
+                    IdentityResult r = UserManager.Create(directoryMember, pwd);
+                    if (r.Succeeded)
+                        return RedirectToAction("MembershipScope", new { memberId = directoryMember.Id });
+                    else
+                    {
+                        foreach (string e in r.Errors)
+                        {
+                            ModelState.AddModelError("", e);
+                        }
+                    }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Anvil.Repository.ExceptionCollector ec = new Anvil.Repository.ExceptionCollector(ex);
-                    foreach(string e in ec)
+                    foreach (string e in ec)
                     {
                         ModelState.AddModelError("", e);
                     }
@@ -161,17 +234,19 @@ namespace Lcps.Division.Directory.API.Areas.Manage.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            DirectoryMember directoryMember = db.DirectoryMembers.GetByID(id);
+            DirectoryMemberInfo directoryMember = db.DirectoryMembers.GetByID(id);
+            DirectoryMember m = new DirectoryMember(directoryMember);
+
             if (directoryMember == null)
             {
                 return HttpNotFound();
             }
-            return View(directoryMember);
+            return View(m);
         }
 
         public ActionResult UpdateScope(string memberId, long binaryValue)
         {
-            DirectoryMember m = db.DirectoryMembers.GetByID(memberId);
+            DirectoryMemberInfo m = db.DirectoryMembers.GetByID(memberId);
             m.MembershipScope = binaryValue;
             db.DirectoryMembers.Update(m);
             return Content(binaryValue.ToString());
@@ -182,7 +257,7 @@ namespace Lcps.Division.Directory.API.Areas.Manage.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,InternalId,GivenName,MiddleName,SurName,DOB,Gender,InitialPassword,MembershipScope")] DirectoryMember directoryMember)
+        public ActionResult Edit([Bind(Include = "Id,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,InternalId,GivenName,MiddleName,SurName,DOB,Gender,InitialPassword,MembershipScope")] DirectoryMemberInfo directoryMember)
         {
             if (ModelState.IsValid)
             {
@@ -199,7 +274,7 @@ namespace Lcps.Division.Directory.API.Areas.Manage.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            DirectoryMember directoryMember = db.DirectoryMembers.GetByID(id);
+            DirectoryMemberInfo directoryMember = db.DirectoryMembers.GetByID(id);
             if (directoryMember == null)
             {
                 return HttpNotFound();
@@ -212,7 +287,7 @@ namespace Lcps.Division.Directory.API.Areas.Manage.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            DirectoryMember directoryMember = db.DirectoryMembers.GetByID(id);
+            DirectoryMemberInfo directoryMember = db.DirectoryMembers.GetByID(id);
             db.DirectoryMembers.Delete(directoryMember);
             return RedirectToAction("Index");
         }

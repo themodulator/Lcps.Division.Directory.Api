@@ -16,7 +16,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace Lcps.Division.Directory.API.Areas.DirectorySetup.Controllers
+namespace Lcps.Division.Directory.API.Areas.Manage.Controllers
 {
     public class MembershipScopesController : Controller
     {
@@ -38,14 +38,14 @@ namespace Lcps.Division.Directory.API.Areas.DirectorySetup.Controllers
         // GET: DirectorySetup/MembershipScopes
         public ActionResult Index()
         {
-           
+
 
             List<MembershipScope> items = new List<MembershipScope>();
 
             items = db.MembershipScopes.Get().OrderBy(x => x.Caption).ToList();
 
             return View(items);
-            
+
         }
 
         // GET: DirectorySetup/MembershipScopes/Details/5

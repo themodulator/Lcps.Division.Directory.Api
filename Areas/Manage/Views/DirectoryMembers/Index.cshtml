@@ -1,44 +1,60 @@
-﻿@model IEnumerable<Lcps.Division.Directory.Repository.DirectoryMember>
+﻿@using PagedList;
+@using PagedList.Mvc;
+@using Lcps.Division.Directory.Repository;
+
+
+@model PagedList<DirectoryMember>
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Areas/Manage/Views/Shared/_Layout.cshtml";
+    ViewBag.Page = Request["page"];
 }
 
+<style>
+    .dt-table tr th, .dt-table tr td
+    {
+        white-space: nowrap;
+    }
+</style>
 
+<h3>LCPS Directory</h3>
 
-<h2>Index</h2>
+Total: @ViewBag.Total Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+@if (@ViewBag.Filter != null)
+{
+    long f = (long)ViewBag.Filter;
+    <div class="row container"><strong>Filter:</strong>  @string.Join(" and ", MembershipScopeRepository.GetApplicableCaptions(f))</div>
+}
+
+@Html.PagedListPager(Model,
+  page => Url.Action("Index", new { page, @filter = @ViewBag.Filter, @theme = ViewBag.Theme }))
+
 <div class="table-responsive">
-    <table class="table table-hover table-striped table-condensed">
+    <table class="table table-hover table-striped table-condensed dt-table">
         <tr>
             <th></th>
             <th>
-                @Html.DisplayNameFor(model => model.InternalId)
+               <i class="fa fa-key"></i> @Html.DisplayNameFor(model => model.First().InternalId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SurName)
+                <i class="fa fa-user"></i> @Html.DisplayNameFor(model => model.First().SortName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.GivenName)
+                <i class="fa fa-envelope-o"></i> @Html.DisplayNameFor(model => model.First().Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MiddleName)
+                <i class="fa fa-lock"></i>  @Html.DisplayNameFor(model => model.First().UserName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                <i class="fa fa-calendar"></i> @Html.DisplayNameFor(model => model.First().DOB)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UserName)
+                <i class="fa fa-female"></i> @Html.DisplayNameFor(model => model.First().Gender)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DOB)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Gender)
+                <i class="fa fa-cubes"></i> @Html.DisplayNameFor(model => model.First().MembershipScope)
             </th>
 
         </tr>
@@ -53,13 +69,7 @@
                     @Html.DisplayFor(modelItem => item.InternalId)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.SurName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.GivenName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MiddleName)
+                    @Html.DisplayFor(modelItem => item.SortName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Email)
@@ -72,6 +82,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Gender)
+                </td>
+                <td>
+                    @item.GetMembershipScopeCaption()
                 </td>
             </tr>
         }

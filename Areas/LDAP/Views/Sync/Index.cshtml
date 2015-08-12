@@ -1,0 +1,74 @@
+﻿
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Manage/Views/Shared/_Layout.cshtml";
+}
+
+
+<script>
+    $(function () {
+        $('.cb-toggle').bootstrapToggle();
+    })
+
+    function saveChanges(memberId) {
+        var total = 0;
+        $('.cb-toggle').each(
+            function () {
+                var id = $(this).attr('id');
+                var val = parseInt(id.replace('cb-', ''));
+                var ckd = $(this).prop('checked');
+
+                if (ckd) {
+                    total += val;
+                }
+            }
+        );
+
+        $.ajax({
+            url: "@Url.Action("UpdateScope", "DirectoryMembers", new { area = "Manage" })",
+            data: {
+                memberId: memberId,
+                binaryValue: total
+            },
+
+            success: function (data) {
+                window.location.href = '/Manage/DirectoryMembers/Edit?id=' + memberId;
+            }
+        });
+    }
+
+    function getParameterByName(name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+
+</script>
+
+<h2>Index</h2>
+
+<!-- Trigger the modal with a button -->
+<button type="button" class="btn btn-info" data-toggle="modal" data-target="#stuModal"><i class="fa fa-graduation-cap"></i> Student Filter</button>
+
+<!-- Modal -->
+<div id="stuodal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Student Filter</h4>
+            </div>
+            <div class="modal-body">
+                @Html.Partial("~/Areas/Manage/Views/Shared/_StudentFilter.cshtml")
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>

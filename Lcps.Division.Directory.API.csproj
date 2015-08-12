@@ -86,6 +86,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\Lcps.Division.Directory.Solution\Lcps.Division.Directory\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
@@ -188,8 +190,6 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\API\APIAreaRegistration.cs" />
     <Compile Include="Areas\API\Controllers\MembershipScopesController.cs" />
-    <Compile Include="Areas\DirectorySetup\Controllers\MembershipScopesController.cs" />
-    <Compile Include="Areas\DirectorySetup\DirectorySetupAreaRegistration.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
     <Compile Include="Areas\HelpPage\App_Start\HelpPageConfig.cs" />
     <Compile Include="Areas\HelpPage\Controllers\HelpController.cs" />
@@ -219,8 +219,11 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Areas\Import\ImportAreaRegistration.cs" />
+    <Compile Include="Areas\LDAP\Controllers\SyncController.cs" />
+    <Compile Include="Areas\LDAP\LDAPAreaRegistration.cs" />
     <Compile Include="Areas\Manage\Controllers\DirectoryMembersController.cs" />
     <Compile Include="Areas\Manage\Controllers\MemberImportController.cs" />
+    <Compile Include="Areas\Manage\Controllers\MembershipScopesController.cs" />
     <Compile Include="Areas\Manage\ManageAreaRegistration.cs" />
     <Compile Include="Areas\Manage\Models\DirectoryMemberListModel.cs" />
     <Compile Include="Areas\Manage\Models\MembershipScopeModel.cs" />
@@ -239,6 +242,14 @@
     <Compile Include="Migrations\201508100346274_UserTitle.Designer.cs">
       <DependentUpon>201508100346274_UserTitle.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201508111106401_DiretcorymemberMemberClass.cs" />
+    <Compile Include="Migrations\201508111106401_DiretcorymemberMemberClass.Designer.cs">
+      <DependentUpon>201508111106401_DiretcorymemberMemberClass.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201508111600375_UserMemberSchema001.cs" />
+    <Compile Include="Migrations\201508111600375_UserMemberSchema001.Designer.cs">
+      <DependentUpon>201508111600375_UserMemberSchema001.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs">
       <SubType>Code</SubType>
@@ -252,11 +263,20 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
-    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\Themes\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Themes\cerulean.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\Themes\journal.css" />
+    <Content Include="Content\Themes\lumen.css" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Content\Themes\paper.css" />
+    <Content Include="Content\Themes\simplex.css" />
+    <Content Include="Content\Themes\slate.css" />
+    <Content Include="Content\Themes\spacelab.css" />
+    <Content Include="Content\Themes\superhero.css" />
+    <Content Include="Content\Themes\yeti.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -283,14 +303,12 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <Content Include="Areas\DirectorySetup\Views\web.config" />
-    <Content Include="Areas\DirectorySetup\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\DirectorySetup\Views\MembershipScopes\Create.cshtml" />
-    <Content Include="Areas\DirectorySetup\Views\MembershipScopes\Delete.cshtml" />
-    <Content Include="Areas\DirectorySetup\Views\MembershipScopes\Details.cshtml" />
-    <Content Include="Areas\DirectorySetup\Views\MembershipScopes\Edit.cshtml" />
-    <Content Include="Areas\DirectorySetup\Views\MembershipScopes\Index.cshtml" />
-    <Content Include="Areas\DirectorySetup\Views\MembershipScopes\_MembershipScopeList.cshtml" />
+    <Content Include="Areas\Manage\Views\MembershipScopes\Create.cshtml" />
+    <Content Include="Areas\Manage\Views\MembershipScopes\Delete.cshtml" />
+    <Content Include="Areas\Manage\Views\MembershipScopes\Details.cshtml" />
+    <Content Include="Areas\Manage\Views\MembershipScopes\Edit.cshtml" />
+    <Content Include="Areas\Manage\Views\MembershipScopes\Index.cshtml" />
+    <Content Include="Areas\Manage\Views\MembershipScopes\_MembershipScopeList.cshtml" />
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
@@ -314,6 +332,11 @@
     <Content Include="Areas\Manage\Views\MemberImport\MemberPreview.cshtml" />
     <Content Include="Areas\Manage\Views\DirectoryMembers\_MemberList.cshtml" />
     <Content Include="Areas\Manage\Views\DirectoryMembers\MemberPreview.cshtml" />
+    <Content Include="Areas\Manage\Views\MemberImport\ImportReport.cshtml" />
+    <Content Include="Areas\LDAP\Views\web.config" />
+    <Content Include="Areas\Manage\Views\Shared\_StudentFilter.cshtml" />
+    <Content Include="Areas\LDAP\Views\Sync\Index.cshtml" />
+    <Content Include="Areas\Manage\Views\DirectoryMembers\Filter.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -341,10 +364,11 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\API\Models\" />
     <Folder Include="Areas\API\Views\Shared\" />
-    <Folder Include="Areas\DirectorySetup\Models\" />
     <Folder Include="Areas\Import\Controllers\" />
     <Folder Include="Areas\Import\Models\" />
     <Folder Include="Areas\Import\Views\Shared\" />
+    <Folder Include="Areas\LDAP\Models\" />
+    <Folder Include="Areas\LDAP\Views\Shared\" />
     <Folder Include="Providers\" />
   </ItemGroup>
   <ItemGroup>
@@ -360,6 +384,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201508100346274_UserTitle.resx">
       <DependentUpon>201508100346274_UserTitle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508111106401_DiretcorymemberMemberClass.resx">
+      <DependentUpon>201508111106401_DiretcorymemberMemberClass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508111600375_UserMemberSchema001.resx">
+      <DependentUpon>201508111600375_UserMemberSchema001.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

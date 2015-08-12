@@ -14,7 +14,7 @@ namespace Lcps.Division.Directory.API.Controllers
 
             //return View();
 
-            return RedirectToAction("Index", "MembershipScopes", new { area = "DirectorySetup" });
+            return RedirectToAction("Index", "DirectoryMembers", new { area = "Manage" });
         }
     }
 }

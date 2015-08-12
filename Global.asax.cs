@@ -6,6 +6,8 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Lcps.Division.Directory.Repository;
+using Lcps.Division.Directory.Infrastructure;
 
 namespace Lcps.Division.Directory.API
 {
@@ -22,7 +24,6 @@ namespace Lcps.Division.Directory.API
             // ---------- Instantiating this instance of the context adds the connection 
             // string to the properties section
             Lcps.Division.Directory.API.Infrastructure.LcpsApiRepositoryContext db = new Infrastructure.LcpsApiRepositoryContext();
-
 
         }
     }

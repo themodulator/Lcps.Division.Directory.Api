@@ -11,7 +11,7 @@ namespace Lcps.Division.Directory.API.Areas.Manage.Models
     {
         public List<MembershipScopeEditorItem> MembershipScopes { get; set; }
 
-        public DirectoryMember Person { get; set; }
+        public DirectoryMemberInfo Person { get; set; }
         
     }
 }
